@@ -1,0 +1,3 @@
+#git learning
+*src/app.py
+requirements.txt
