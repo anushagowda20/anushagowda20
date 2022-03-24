@@ -1,0 +1,11 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('SCM') {
+            steps {
+                    git branch: 'main', credentialsId: 'git_fetch', url: 'https://github.com/anushagowda20/test.git'
+            }
+        }
+    }
+}    
