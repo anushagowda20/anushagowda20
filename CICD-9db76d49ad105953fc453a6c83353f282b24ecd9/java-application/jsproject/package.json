@@ -1,0 +1,23 @@
+{
+  "name": "my_package",
+  "description": "",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "echo \"C'est une compilation !\"",
+    "test": "echo \"Error: no test specified\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/monatheoctocat/my_package.git"
+  },
+  "dependencies": {
+    "cozy-ui": "45.5.0"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/monatheoctocat/my_package/issues"
+  },
+  "homepage": "https://github.com/monatheoctocat/my_package"
+}

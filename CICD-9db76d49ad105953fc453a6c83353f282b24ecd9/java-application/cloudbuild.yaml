@@ -1,0 +1,63 @@
+# CI File for Google Cloud Build
+steps:
+  # Maven block
+    # Build Step
+  - name: 'maven'
+    id: M1
+    entrypoint: 'mvn'
+    args: ['clean','install', '-DskipTests']
+    # Test Step
+  - name: 'maven'
+    id: M2
+    entrypoint: 'mvn'
+    args: ['test']
+    waitFor: ["M1"]
+    # Dockerize Step
+  - name: 'gcr.io/cloud-builders/docker'
+    id: DM1
+    waitFor: ["M2"]
+    args: ['login', '-u', 'mkaziel', '-p', '462ee77b-5b16-427a-87dd-ec8a5979e32d']
+  - name: 'gcr.io/cloud-builders/docker'
+    id: DM2
+    waitFor: ["DM1"]
+    args: ['build', '-t', 'mkaziel/eval-cicd-maven', '.']
+  - name: 'gcr.io/cloud-builders/docker'
+    id: DM3
+    waitFor: ["DM2"]
+    args: ['push', 'mkaziel/eval-cicd-maven']
+  # Node block
+    # Build Step
+  - name: 'node'
+    id: N1
+    entrypoint: 'npm'
+    dir: 'jsproject'
+    args: ['i']
+  - name: 'node'
+    id: N2
+    entrypoint: 'npm'
+    dir: 'jsproject'
+    waitFor: ['N1']
+    args: ['run','build']
+    # Test Step
+  - name: 'node'
+    id: N3
+    entrypoint: 'npm'
+    dir: 'jsproject'
+    waitFor: ['N2']
+    args: ['run','test']
+    # Dockerize Step
+  - name: 'gcr.io/cloud-builders/docker'
+    id: DN1
+    dir: 'jsproject'
+    waitFor: ['N3']
+    args: ['login', '-u', 'mkaziel', '-p', '462ee77b-5b16-427a-87dd-ec8a5979e32d']
+  - name: 'gcr.io/cloud-builders/docker'
+    id: DN2
+    dir: 'jsproject'
+    waitFor: ['DN1']
+    args: ['build', '-t', 'mkaziel/eval-cicd-node', '.']
+  - name: 'gcr.io/cloud-builders/docker'
+    id: DN3
+    dir: 'jsproject'
+    waitFor: ['DN2']
+    args: ['push', 'mkaziel/eval-cicd-node']
